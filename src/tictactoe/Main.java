@@ -57,25 +57,27 @@ public class Main {
         playerO = parametersOfGame.get(2);
         printTable();
         do {
-            movePlayerX(playerX);
             if (!getGameStatus()) {
+                movePlayerX(playerX);
+            }
+            if(!getGameStatus()) {
                 movePlayerO(playerO);
             }
         } while(!gameEnd);
     }
     public static void movePlayerX(String playerX) {
-        if (playerX == "user") {
+        if ("user".equals(playerX)) {
             moveUser("X");
-        } else {
+        } else if ("easy".equals(playerX)) {
             moveAI("X");
         }
     }
 
     public static void movePlayerO(String playerO) {
-        if (playerO == "easy") {
-            moveAI("O");
-        } else {
+        if ("user".equals(playerO)) {
             moveUser("O");
+        } else if ("easy".equals(playerO)) {
+            moveAI("O");
         }
     }
 
@@ -97,20 +99,16 @@ public class Main {
         String input;
         int cellRow = 0;
         int cellColumn = 0;
-
         do {
-               do {
-                   System.out.print("Enter the coordinates: ");
-                   input = scanner.nextLine().trim();
-                   if (processInput(input)) {
-                       cellRow = Integer.parseInt(input.substring(0, input.indexOf(" ")));
-                       cellColumn = Integer.parseInt(input.substring(input.indexOf(" ") + 1));
-                   } else {
-                       System.out.println("You should enter numbers!");
-                   }
-               } while (!checkPlacement(cellRow, cellColumn, letter));
-        } while (!gameEnd);
-
+            System.out.print("Enter the coordinates: ");
+            input = scanner.nextLine().trim();
+            if (processInput(input)) {
+                cellRow = Integer.parseInt(input.substring(0, input.indexOf(" ")));
+                cellColumn = Integer.parseInt(input.substring(input.indexOf(" ") + 1));
+            } else {
+                System.out.println("You should enter numbers!");
+            }
+        } while (!checkPlacement(cellRow, cellColumn, letter));
     }
 
     public static boolean processInput(String input) {
@@ -142,7 +140,6 @@ public class Main {
         }
         return check;
     }
-
 
     private static boolean getGameStatus() {
         boolean finish = false;
