@@ -8,7 +8,7 @@ public class Main {
         start();
     }
 
-    private static String[][] table = new String [3][3];
+    private static final String[][] table = new String [3][3];
 
     public static Scanner scanner = new Scanner(System.in);
 
@@ -28,10 +28,10 @@ public class Main {
 
     public static void printTable() {
         System.out.println("---------");
-        for (int i = 0; i < table.length; i++) {
+        for (String[] strings : table) {
             System.out.print("|");
             for (int j = 0; j < table[0].length; j++) {
-                System.out.print(" " + table[i][j]);
+                System.out.print(" " + strings[j]);
             }
             System.out.print(" ");
             System.out.println("|");
@@ -43,7 +43,6 @@ public class Main {
     public static void choiceCell() {
         int cellRow = 0;
         int cellColumn = 0;
-        boolean notInteger = true;
 
         do {
                 System.out.print("Enter the coordinates: ");
@@ -61,8 +60,7 @@ public class Main {
 
     public static boolean processInput(String input) {
 
-        boolean b = input.matches("\\d\\s\\d");
-        return b;
+        return input.matches("\\d\\s\\d");
     }
 
     public static boolean checkInput(int first, int second) {
@@ -79,7 +77,7 @@ public class Main {
 
     private static boolean checkPlacement(int first, int second) {
         boolean check = false;
-        if (table[first - 1][second - 1] != "_") {
+        if (!"_".equals(table[first - 1][second - 1])) {
             System.out.println("This cell is occupied! Choose another one!");
         } else {
             check = true;
