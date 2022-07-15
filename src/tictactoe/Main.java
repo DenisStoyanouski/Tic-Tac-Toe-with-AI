@@ -18,7 +18,7 @@ public class Main {
         int letter = 0;
         for (int i = 0; i < table.length; i++) {
             for (int j = 0; j < table[i].length; j++) {
-                table[i][j] = " ";
+                table[i][j] = "_";
                 letter++;
             }
         }
@@ -56,8 +56,8 @@ public class Main {
                        System.out.println("You should enter numbers!");
                    }
                } while (!processInput(input));
-
                checkInput(cellRow, cellColumn);
+               stepOfAI();
 
         } while (!gameStatus());
 
@@ -86,14 +86,14 @@ public class Main {
         if (!"_".equals(table[first - 1][second - 1])) {
             System.out.println("This cell is occupied! Choose another one!");
         } else {
-            table[first - 1][second - 1] = switchLetter();
+            table[first - 1][second - 1] = "X";
             printTable();
             check = true;
         }
         return check;
     }
 
-    private static String switchLetter() {
+    /*private static String switchLetter() {
         String letter;
         int amountX = 0;
         int amountO = 0;
@@ -113,7 +113,7 @@ public class Main {
             letter = "O";
         }
         return letter;
-    }
+    }*/
     private static boolean gameStatus() {
         boolean finish = false;
         if (gameDraw() || gameOver()) {
@@ -174,8 +174,10 @@ public class Main {
         Random random = new Random();
         boolean cellIsEmpty = true;
         do{
+            // create random coordinate;
             int row = random.nextInt(4);
             int column = random.nextInt(4);
+            // check cell with this coordinate;
             if ("_".equals(table[row][column])) {
                 table[row][column] = "O";
                 cellIsEmpty = true;
