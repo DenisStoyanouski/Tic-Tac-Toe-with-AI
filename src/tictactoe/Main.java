@@ -41,41 +41,40 @@ public class Main {
     }
 
     public static void choiceCell() {
-        int first = 0;
-        int second = 0;
+        int cellRow = 0;
+        int cellColumn = 0;
+        boolean notInteger = true;
+
         do {
-            System.out.print("Enter the coordinates: ");
-            try {
-                first = scanner.nextInt();
-                second = scanner.nextInt();
-            } catch (Exception e) {
-                e.getMessage();
-                System.out.println("You should enter numbers!");
-            }
+                System.out.print("Enter the coordinates: ");
+                String input = scanner.nextLine().trim();
+                if (processInput(input)) {
+                    cellRow = Integer.parseInt(input.substring(0, input.indexOf(" ")));
+                    cellColumn = Integer.parseInt(input.substring(input.indexOf(" ") + 1));
+                } else {
+                    System.out.println("You should enter numbers!");
+                }
 
-        } while (!checkInput(first, second));
+        } while (!checkInput(cellRow, cellColumn));
 
+    }
+
+    public static boolean processInput(String input) {
+
+        boolean b = input.matches("\\d\\s\\d");
+        return b;
     }
 
     public static boolean checkInput(int first, int second) {
 
-        boolean firstCheck = false;
-        boolean secondCheck = false;
-            if (first >= 1 && first <= 3 ) {
-                firstCheck = true;
+        boolean checkRange = false;
+            if (first >= 1 && first <= 3 && second >= 1 && second <= 3) {
+                checkRange = true;
             } else {
                 System.out.println("Coordinates should be from 1 to 3!");
-                firstCheck = false;
             }
 
-            if (second >= 1 && second <= 3 ) {
-                secondCheck = true;
-            } else {
-                System.out.println("Coordinates should be from 1 to 3!");
-                secondCheck = false;
-            }
-        checkPlacement(first, second);
-        return firstCheck && secondCheck && checkPlacement(first, second);
+        return checkRange && checkPlacement(first, second);
     }
 
     private static boolean checkPlacement(int first, int second) {
