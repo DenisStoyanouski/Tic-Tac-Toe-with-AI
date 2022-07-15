@@ -13,6 +13,7 @@ public class Main {
     private static final String[][] table = new String [3][3];
 
     public static Scanner scanner = new Scanner(System.in);
+    private static boolean gameEnd;
 
     public static void start() {
         //display empty table
@@ -52,13 +53,13 @@ public class Main {
                    } else {
                        System.out.println("You should enter numbers!");
                    }
-               } while (!processInput(input));
-               checkInput(cellRow, cellColumn);
-               if (!gameStatus()) {
+               } while (!checkPlacement(cellRow, cellColumn));
+
+               if (!getGameStatus()) {
                    stepOfAI();
                }
 
-        } while (!gameStatus());
+        } while (!gameEnd);
 
     }
 
@@ -67,7 +68,7 @@ public class Main {
         return input.matches("\\d\\s\\d");
     }
 
-    public static void checkInput(int first, int second) {
+    public static boolean checkInput(int first, int second) {
 
         boolean checkRange = false;
             if (first >= 1 && first <= 3 && second >= 1 && second <= 3) {
@@ -75,19 +76,19 @@ public class Main {
             } else {
                 System.out.println("Coordinates should be from 1 to 3!");
             }
-            if (checkRange) {
-                checkPlacement(first, second);
-            }
+            return checkRange;
     }
 
     private static boolean checkPlacement(int first, int second) {
         boolean check = false;
-        if (!"_".equals(table[first - 1][second - 1])) {
-            System.out.println("This cell is occupied! Choose another one!");
-        } else {
-            table[first - 1][second - 1] = "X";
-            printTable();
-            check = true;
+        if (checkInput(first, second)) {
+            if (!"_".equals(table[first - 1][second - 1])) {
+                System.out.println("This cell is occupied! Choose another one!");
+            } else {
+                table[first - 1][second - 1] = "X";
+                printTable();
+                check = true;
+            }
         }
         return check;
     }
@@ -113,10 +114,13 @@ public class Main {
         }
         return letter;
     }*/
-    private static boolean gameStatus() {
+    private static boolean getGameStatus() {
         boolean finish = false;
         if (gameDraw() || gameOver()) {
             finish = true;
+            gameEnd = true;
+        } else {
+            gameEnd = false;
         }
         return finish;
     }
