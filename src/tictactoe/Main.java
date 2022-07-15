@@ -1,27 +1,82 @@
 package tictactoe;
 
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class Main {
-    public static void main(String[] args) {
-        start();
-    }
 
     private static final String[][] table = new String [3][3];
 
+    private static final List<String> gameMode =List.of("user", "easy");
+
     public static Scanner scanner = new Scanner(System.in);
+
     private static boolean gameEnd;
 
-    public static void start() {
+    private static String playerX;
+
+    private static String playerO;
+
+    public static void main(String[] args) {
+        isMenu();
+    }
+
+
+    private static void isMenu() {
+        List<String> parametersOfGame;
+        do {
+            System.out.print("Input command: ");
+            parametersOfGame = Arrays.stream(scanner.nextLine().split("\\s+")).collect(Collectors.toList());
+            if(areParametersRight(parametersOfGame) && "start".equals(parametersOfGame.get(0))) {
+                startGame(parametersOfGame);
+            } else if(!"exit".equals(parametersOfGame.get(0))) {
+                System.out.println("Bad parameters!");
+            }
+
+        } while (!"exit".equals(parametersOfGame.get(0)));
+    }
+
+    private static boolean areParametersRight(List<String> parametersOfGame) {
+        boolean correct = false;
+        if (parametersOfGame.size() == 3) {
+            if (gameMode.contains(parametersOfGame.get(1)) && gameMode.contains(parametersOfGame.get(2))) {
+                correct = true;
+            }
+        }
+        return correct;
+    }
+
+
+    private static void startGame(List<String> parametersOfGame) {
         //display empty table
         for (int i = 0; i < table.length; i++) {
             Arrays.fill(table[i], "_");
         }
+        playerX = parametersOfGame.get(1);
+        playerO = parametersOfGame.get(2);
         printTable();
-        choiceCell();
+        do {
+            movePlayerX(playerX);
+            if (!getGameStatus()) {
+                movePlayerO(playerO);
+            }
+        } while(!gameEnd);
+    }
+    public static void movePlayerX(String playerX) {
+        if (playerX == "user") {
+            moveUser("X");
+        } else {
+            moveAI("X");
+        }
+    }
+
+    public static void movePlayerO(String playerO) {
+        if (playerO == "easy") {
+            moveAI("O");
+        } else {
+            moveUser("O");
+        }
     }
 
     public static void printTable() {
@@ -38,7 +93,7 @@ public class Main {
 
     }
 
-    public static void choiceCell() {
+    public static void moveUser(String letter) {
         String input;
         int cellRow = 0;
         int cellColumn = 0;
@@ -53,12 +108,7 @@ public class Main {
                    } else {
                        System.out.println("You should enter numbers!");
                    }
-               } while (!checkPlacement(cellRow, cellColumn));
-
-               if (!getGameStatus()) {
-                   stepOfAI();
-               }
-
+               } while (!checkPlacement(cellRow, cellColumn, letter));
         } while (!gameEnd);
 
     }
@@ -79,13 +129,13 @@ public class Main {
             return checkRange;
     }
 
-    private static boolean checkPlacement(int first, int second) {
+    private static boolean checkPlacement(int first, int second, String letter) {
         boolean check = false;
         if (checkInput(first, second)) {
             if (!"_".equals(table[first - 1][second - 1])) {
                 System.out.println("This cell is occupied! Choose another one!");
             } else {
-                table[first - 1][second - 1] = "X";
+                table[first - 1][second - 1] = letter;
                 printTable();
                 check = true;
             }
@@ -93,27 +143,7 @@ public class Main {
         return check;
     }
 
-    /*private static String switchLetter() {
-        String letter;
-        int amountX = 0;
-        int amountO = 0;
-        for (String[] strings : table) {
-            for (String cell : strings) {
-                if ("X".equals(cell)) {
-                    amountX++;
-                }
-                if ("O".equals(cell)) {
-                    amountO++;
-                }
-            }
-        }
-        if (amountX == amountO) {
-            letter = "X";
-        } else {
-            letter = "O";
-        }
-        return letter;
-    }*/
+
     private static boolean getGameStatus() {
         boolean finish = false;
         if (gameDraw() || gameOver()) {
@@ -171,7 +201,7 @@ public class Main {
         return gameOver;
     }
 
-    private static void stepOfAI () {
+    private static void moveAI(String letter) {
         Random random = new Random();
         boolean cellIsEmpty;
         do{
@@ -180,7 +210,7 @@ public class Main {
             int column = random.nextInt(3);
             // check cell with this coordinate;
             if ("_".equals(table[row][column])) {
-                table[row][column] = "O";
+                table[row][column] = letter;
                 cellIsEmpty = true;
                 System.out.println("Making move level \"easy\"");
                 printTable();
