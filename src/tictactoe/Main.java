@@ -1,6 +1,7 @@
 package tictactoe;
 
 import java.util.Scanner;
+import java.util.Random;
 
 
 public class Main {
@@ -13,13 +14,11 @@ public class Main {
     public static Scanner scanner = new Scanner(System.in);
 
     public static void start() {
-        //enter start position
-        System.out.print("Enter the cells: ");
-        String line = scanner.nextLine();
+        //display empty table
         int letter = 0;
         for (int i = 0; i < table.length; i++) {
             for (int j = 0; j < table[i].length; j++) {
-                table[i][j] = String.valueOf(line.charAt(letter));
+                table[i][j] = " ";
                 letter++;
             }
         }
@@ -169,6 +168,22 @@ public class Main {
             System.out.println("O wins");
         }
         return gameOver;
+    }
+
+    private static void stepOfAI () {
+        Random random = new Random();
+        boolean cellIsEmpty = true;
+        do{
+            int row = random.nextInt(4);
+            int column = random.nextInt(4);
+            if ("_".equals(table[row][column])) {
+                table[row][column] = "O";
+                cellIsEmpty = true;
+                System.out.println("Making move level \"easy\"");
+            } else {
+                cellIsEmpty = false;
+            }
+        } while (!cellIsEmpty);
     }
 
 }
