@@ -1,6 +1,5 @@
 package tictactoe;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -14,6 +13,7 @@ public class Main {
     public static Scanner scanner = new Scanner(System.in);
 
     public static void start() {
+        //enter start position
         System.out.print("Enter the cells: ");
         String line = scanner.nextLine();
         int letter = 0;
@@ -31,8 +31,8 @@ public class Main {
         System.out.println("---------");
         for (String[] strings : table) {
             System.out.print("|");
-            for (int j = 0; j < table[0].length; j++) {
-                System.out.print(" " + strings[j]);
+            for (String cell : strings) {
+                System.out.print(" " + cell);
             }
             System.out.print(" ");
             System.out.println("|");
@@ -69,7 +69,7 @@ public class Main {
         return input.matches("\\d\\s\\d");
     }
 
-    public static boolean checkInput(int first, int second) {
+    public static void checkInput(int first, int second) {
 
         boolean checkRange = false;
             if (first >= 1 && first <= 3 && second >= 1 && second <= 3) {
@@ -77,8 +77,9 @@ public class Main {
             } else {
                 System.out.println("Coordinates should be from 1 to 3!");
             }
-
-        return checkRange && checkPlacement(first, second);
+            if (checkRange) {
+                checkPlacement(first, second);
+            }
     }
 
     private static boolean checkPlacement(int first, int second) {
