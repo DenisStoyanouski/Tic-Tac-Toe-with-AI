@@ -1,5 +1,6 @@
 package tictactoe;
 
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -15,12 +16,8 @@ public class Main {
 
     public static void start() {
         //display empty table
-        int letter = 0;
         for (int i = 0; i < table.length; i++) {
-            for (int j = 0; j < table[i].length; j++) {
-                table[i][j] = "_";
-                letter++;
-            }
+            Arrays.fill(table[i], "_");
         }
         printTable();
         choiceCell();
@@ -57,7 +54,9 @@ public class Main {
                    }
                } while (!processInput(input));
                checkInput(cellRow, cellColumn);
-               stepOfAI();
+               if (!gameStatus()) {
+                   stepOfAI();
+               }
 
         } while (!gameStatus());
 
@@ -118,8 +117,6 @@ public class Main {
         boolean finish = false;
         if (gameDraw() || gameOver()) {
             finish = true;
-        } else {
-            System.out.println("Game not finished");
         }
         return finish;
     }
@@ -172,16 +169,17 @@ public class Main {
 
     private static void stepOfAI () {
         Random random = new Random();
-        boolean cellIsEmpty = true;
+        boolean cellIsEmpty;
         do{
             // create random coordinate;
-            int row = random.nextInt(4);
-            int column = random.nextInt(4);
+            int row = random.nextInt(3);
+            int column = random.nextInt(3);
             // check cell with this coordinate;
             if ("_".equals(table[row][column])) {
                 table[row][column] = "O";
                 cellIsEmpty = true;
                 System.out.println("Making move level \"easy\"");
+                printTable();
             } else {
                 cellIsEmpty = false;
             }
