@@ -8,7 +8,7 @@ public class Main {
 
     private static final String[][] table = new String [3][3];
 
-    private static final List<String> gameMode =List.of("user", "easy");
+    private static final List<String> gameMode =List.of("user", "easy", "medium");
 
     public static Scanner scanner = new Scanner(System.in);
 
@@ -66,18 +66,28 @@ public class Main {
         } while(!gameEnd);
     }
     public static void movePlayerX(String playerX) {
-        if ("user".equals(playerX)) {
-            moveUser("X");
-        } else if ("easy".equals(playerX)) {
-            moveAI("X");
+        switch (playerX) {
+            case "user" : moveUser("X");
+            break;
+            case "easy" : moveEasyAI("X");
+            break;
+            case "medium" : moveMediumAI("X");
+            break;
+            default:
+                break;
         }
     }
 
     public static void movePlayerO(String playerO) {
-        if ("user".equals(playerO)) {
-            moveUser("O");
-        } else if ("easy".equals(playerO)) {
-            moveAI("O");
+        switch (playerO) {
+            case "user" : moveUser("O");
+                break;
+            case "easy" : moveEasyAI("O");
+                break;
+            case "medium" : moveMediumAI("O");
+                break;
+            default:
+                break;
         }
     }
 
@@ -198,7 +208,7 @@ public class Main {
         return gameOver;
     }
 
-    private static void moveAI(String letter) {
+    private static void moveEasyAI(String letter) {
         Random random = new Random();
         boolean cellIsEmpty;
         do{
@@ -215,6 +225,127 @@ public class Main {
                 cellIsEmpty = false;
             }
         } while (!cellIsEmpty);
+    }
+
+    private static void moveMediumAI(String letter) {
+        Random random = new Random();
+
+        if (doWinStep(letter) || doBlockStep(letter)) {
+            boolean cellIsEmpty;
+            do{
+                // create random coordinate;
+                int row = random.nextInt(3);
+                int column = random.nextInt(3);
+                // check cell with this coordinate;
+                if ("_".equals(table[row][column])) {
+                    table[row][column] = letter;
+                    cellIsEmpty = true;
+                    System.out.println("Making move level \"medium\"");
+                    printTable();
+                } else {
+                    cellIsEmpty = false;
+                }
+            } while (!cellIsEmpty);
+        }
+
+    }
+
+    private static boolean doWinStep(String letter) {
+        boolean stepDone = false;
+        String first = String.format("_%s%s", letter, letter);
+        String second = String.format("%s_%s", letter, letter);
+        String third = String.format("%s%s_", letter, letter);
+
+        for (int line = 0; line < table.length; line++) {
+            for (int column = 0; column < table[line].length; column++) {
+                if ("_".equals(table[line][column])) {
+                    if (Arrays.stream(table[line]).toString().equals(first) ||
+                            Arrays.stream(table[line]).toString().equals(second) ||
+                            Arrays.stream(table[line]).toString().equals(third)) {
+                        table[line][column] = letter;
+                        stepDone = true;
+                    }
+                    if (Objects.equals(table[0][column] + table[1][column] + table[2][column], first) ||
+                            Objects.equals(table[0][column] + table[1][column] + table[2][column], second) ||
+                            Objects.equals(table[0][column] + table[1][column] + table[2][column], third)) {
+                        table[line][column] = letter;
+                        stepDone = true;
+                    }
+                    if (column == line) {
+                        if (Objects.equals(table[0][0] + table[1][1] + table[2][2], first) ||
+                                Objects.equals(table[0][0] + table[1][1] + table[2][2], second) ||
+                                Objects.equals(table[0][0] + table[1][1] + table[2][2], third)) {
+                            table[line][column] = letter;
+                            stepDone = true;
+                        }
+                    }
+                    if (line == 0 && column == 2 || line == 2 && column == 0) {
+                        if (Objects.equals(table[0][2] + table[1][1] + table[2][0], first) ||
+                                Objects.equals(table[0][2] + table[1][1] + table[2][0], second) ||
+                                Objects.equals(table[0][2] + table[1][1] + table[2][0], third)) {
+                            table[line][column] = letter;
+                            stepDone = true;
+                        }
+
+                    }
+                }
+            }
+        }
+        return stepDone;
+    }
+
+    private static boolean doBlockStep(String letter) {
+        boolean stepDone = false;
+        String oppositeLetter = "";
+        switch (letter) {
+            case "X" : oppositeLetter = "O";
+                break;
+            case "O" : oppositeLetter = "X";
+                break;
+            default:
+                break;
+        }
+
+        String first = String.format("_%s%s", oppositeLetter, oppositeLetter);
+        String second = String.format("%s_%s", oppositeLetter, oppositeLetter);
+        String third = String.format("%s%s_", oppositeLetter, oppositeLetter);
+
+        for (int line = 0; line < table.length; line++) {
+            for (int column = 0; column < table[line].length; column++) {
+                if ("_".equals(table[line][column])) {
+                    if (Arrays.stream(table[line]).toString().equals(first) ||
+                            Arrays.stream(table[line]).toString().equals(second) ||
+                            Arrays.stream(table[line]).toString().equals(third)) {
+                        table[line][column] = letter;
+                        stepDone = true;
+                    }
+                    if (Objects.equals(table[0][column] + table[1][column] + table[2][column], first) ||
+                            Objects.equals(table[0][column] + table[1][column] + table[2][column], second) ||
+                            Objects.equals(table[0][column] + table[1][column] + table[2][column], third)) {
+                        table[line][column] = letter;
+                        stepDone = true;
+                    }
+                    if (column == line) {
+                        if (Objects.equals(table[0][0] + table[1][1] + table[2][2], first) ||
+                                Objects.equals(table[0][0] + table[1][1] + table[2][2], second) ||
+                                Objects.equals(table[0][0] + table[1][1] + table[2][2], third)) {
+                            table[line][column] = letter;
+                            stepDone = true;
+                        }
+                    }
+                    if (line == 0 && column == 2 || line == 2 && column == 0) {
+                        if (Objects.equals(table[0][2] + table[1][1] + table[2][0], first) ||
+                                Objects.equals(table[0][2] + table[1][1] + table[2][0], second) ||
+                                Objects.equals(table[0][2] + table[1][1] + table[2][0], third)) {
+                            table[line][column] = letter;
+                            stepDone = true;
+                        }
+
+                    }
+                }
+            }
+        }
+        return stepDone;
     }
 
 }
