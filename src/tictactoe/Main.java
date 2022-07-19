@@ -291,6 +291,10 @@ public class Main {
                 }
             }
         }
+        if (stepDone) {
+            System.out.println("Making move level \"medium\"");
+            printTable();
+        }
         return stepDone;
     }
 
@@ -344,6 +348,10 @@ public class Main {
                     }
                 }
             }
+        }
+        if (stepDone) {
+            System.out.println("Making move level \"medium\"");
+            printTable();
         }
         return stepDone;
     }
