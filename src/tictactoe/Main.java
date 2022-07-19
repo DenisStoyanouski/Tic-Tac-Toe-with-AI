@@ -230,7 +230,7 @@ public class Main {
     private static void moveMediumAI(String letter) {
         Random random = new Random();
 
-        if (doWinStep(letter) || doBlockStep(letter)) {
+        if (!doWinStep(letter) && !doBlockStep(letter)) {
             boolean cellIsEmpty;
             do{
                 // create random coordinate;
