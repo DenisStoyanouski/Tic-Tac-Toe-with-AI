@@ -238,7 +238,7 @@ public class Main {
 
         if (!doWinStep(letter)) {
             if (!doBlockStep(letter)) {
-                Random random = new Random();
+                Random random = new Random(1);
                 boolean cellIsEmpty;
                 do {
                     // create random coordinate;
