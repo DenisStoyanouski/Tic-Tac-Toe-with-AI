@@ -78,6 +78,7 @@ public class Main {
             break;
             case "medium" : moveMediumAI(letter);
             break;
+            case "hard" : moveHardAI(letter);
             default:
                 break;
         }
@@ -91,6 +92,8 @@ public class Main {
             case "easy" : moveEasyAI(letter);
                 break;
             case "medium" : moveMediumAI(letter);
+                break;
+            case "hard" : moveHardAI(letter);
                 break;
             default:
                 break;
@@ -257,6 +260,10 @@ public class Main {
 
             }
         }
+    }
+
+    private static void moveHardAI(String letter) {
+
     }
 
     private static boolean doWinStep(String letter) {
