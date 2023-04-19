@@ -6,36 +6,27 @@ import java.util.stream.Collectors;
 
 public class Main {
 
-    private static final String[][] table = new String [3][3];
-
-    private static final List<String> gameMode =List.of("user", "easy", "medium");
-
+    private static final String[][] table = new String[3][3];
+    private static final List<String> gameMode = List.of("user", "easy", "medium", "hard");
     public static Scanner scanner = new Scanner(System.in);
-
     private static boolean gameEnd;
-
     private static String playerX;
-
     private static String playerO;
-
     private static String letter;
-
     public static void main(String[] args) {
         isMenu();
     }
-
 
     private static void isMenu() {
         List<String> parametersOfGame;
         do {
             System.out.print("Input command: ");
             parametersOfGame = Arrays.stream(scanner.nextLine().split("\\s+")).collect(Collectors.toList());
-            if(areParametersRight(parametersOfGame) && "start".equals(parametersOfGame.get(0))) {
+            if (areParametersRight(parametersOfGame) && "start".equals(parametersOfGame.get(0))) {
                 startGame(parametersOfGame);
-            } else if(!"exit".equals(parametersOfGame.get(0))) {
+            } else if (!"exit".equals(parametersOfGame.get(0))) {
                 System.out.println("Bad parameters!");
             }
-
         } while (!"exit".equals(parametersOfGame.get(0)));
     }
 
@@ -48,7 +39,6 @@ public class Main {
         }
         return correct;
     }
-
 
     private static void startGame(List<String> parametersOfGame) {
         //display empty table
@@ -64,21 +54,26 @@ public class Main {
                 movePlayerX(playerX);
             }
             getGameStatus();
-            if(!gameEnd) {
+            if (!gameEnd) {
                 movePlayerO(playerO);
             }
-        } while(!gameEnd);
+        } while (!gameEnd);
     }
+
     public static void movePlayerX(String playerX) {
         letter = "X";
         switch (playerX) {
-            case "user" : moveUser(letter);
-            break;
-            case "easy" : moveEasyAI(letter);
-            break;
-            case "medium" : moveMediumAI(letter);
-            break;
-            case "hard" : moveHardAI(letter);
+            case "user":
+                moveUser(letter);
+                break;
+            case "easy":
+                moveEasyAI(letter);
+                break;
+            case "medium":
+                moveMediumAI(letter);
+                break;
+            case "hard":
+                moveHardAI(letter);
             default:
                 break;
         }
@@ -87,13 +82,17 @@ public class Main {
     public static void movePlayerO(String playerO) {
         letter = "O";
         switch (playerO) {
-            case "user" : moveUser(letter);
+            case "user":
+                moveUser(letter);
                 break;
-            case "easy" : moveEasyAI(letter);
+            case "easy":
+                moveEasyAI(letter);
                 break;
-            case "medium" : moveMediumAI(letter);
+            case "medium":
+                moveMediumAI(letter);
                 break;
-            case "hard" : moveHardAI(letter);
+            case "hard":
+                moveHardAI(letter);
                 break;
             default:
                 break;
@@ -138,12 +137,12 @@ public class Main {
     public static boolean checkInput(int first, int second) {
 
         boolean checkRange = false;
-            if (first >= 1 && first <= 3 && second >= 1 && second <= 3) {
-                checkRange = true;
-            } else {
-                System.out.println("Coordinates should be from 1 to 3!");
-            }
-            return checkRange;
+        if (first >= 1 && first <= 3 && second >= 1 && second <= 3) {
+            checkRange = true;
+        } else {
+            System.out.println("Coordinates should be from 1 to 3!");
+        }
+        return checkRange;
     }
 
     private static boolean checkPlacement(int first, int second, String letter) {
@@ -187,7 +186,7 @@ public class Main {
         }
         return draw;
     }
-    
+
     private static boolean gameOver() {
         boolean gameOver = false;
         // X win
@@ -219,22 +218,22 @@ public class Main {
 
     private static void moveEasyAI(String letter) {
 
-                Random random = new Random();
-                boolean cellIsEmpty;
-                do{
-                    // create random coordinate;
-                    int row = random.nextInt(3);
-                    int column = random.nextInt(3);
-                    // check cell with this coordinate;
-                    if ("_".equals(table[row][column])) {
-                        table[row][column] = letter;
-                        cellIsEmpty = true;
-                        System.out.println("Making move level \"easy\"");
-                        printTable();
-                    } else {
-                        cellIsEmpty = false;
-                    }
-                } while (!cellIsEmpty);
+        Random random = new Random();
+        boolean cellIsEmpty;
+        do {
+            // create random coordinate;
+            int row = random.nextInt(3);
+            int column = random.nextInt(3);
+            // check cell with this coordinate;
+            if ("_".equals(table[row][column])) {
+                table[row][column] = letter;
+                cellIsEmpty = true;
+                System.out.println("Making move level \"easy\"");
+                printTable();
+            } else {
+                cellIsEmpty = false;
+            }
+        } while (!cellIsEmpty);
     }
 
     private static void moveMediumAI(String letter) {
@@ -320,9 +319,11 @@ public class Main {
         boolean stepDone = false;
         String oppositeLetter = "";
         switch (letter) {
-            case "X" : oppositeLetter = "O";
+            case "X":
+                oppositeLetter = "O";
                 break;
-            case "O" : oppositeLetter = "X";
+            case "O":
+                oppositeLetter = "X";
                 break;
             default:
                 break;
@@ -378,6 +379,5 @@ public class Main {
         }
         return stepDone;
     }
-
 }
 
