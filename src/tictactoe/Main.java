@@ -3,7 +3,6 @@ package tictactoe;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 public class Main {
 
     private static final String[][] table = new String[3][3];
@@ -13,6 +12,7 @@ public class Main {
     private static String playerX;
     private static String playerO;
     private static String letter;
+
     public static void main(String[] args) {
         isMenu();
     }
@@ -43,6 +43,7 @@ public class Main {
     private static void startGame(List<String> parametersOfGame) {
         //display empty table
         for (int i = 0; i < table.length; i++) {
+            //fill all cells in table with '_'
             Arrays.fill(table[i], "_");
         }
         playerX = parametersOfGame.get(1);
@@ -263,6 +264,10 @@ public class Main {
 
     private static void moveHardAI(String letter) {
 
+        AI ai = new AI(table, letter);
+        table[ai.findBestMove().row][ai.findBestMove().col] = letter;
+        System.out.println("Making move level \"hard\"");
+        printTable();
     }
 
     private static boolean doWinStep(String letter) {
